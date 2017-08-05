@@ -1,14 +1,14 @@
 var Player = {};
 
-Player.init = function(name) {
+Player.init = function(name, id) {
+    this.id = id;
     this.name = name;
 
     // stats here?
 
     this.resetResources();
 
-    // starter boss
-    Client.send
+    Client.joinPyramid(0); // 0 is the starter pyramid
 }
 
 Player.resetResources = function() {

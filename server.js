@@ -2,8 +2,11 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
+var _ = require('lodash');
 
 var plans = require('./server/plans');
+var players = require('./server/players');
+
 
 app.use('/css',express.static(__dirname + '/css'));
 app.use('/js',express.static(__dirname + '/js'));
@@ -13,7 +16,17 @@ app.get('/',function(req,res){
     res.sendFile(__dirname+'/index.html');
 });
 
-server.lastPlayderID = 0;
+// For debugging
+app.get('/players', function(req, res) {
+    res.set({'content-type': 'application/json'});
+    res.end(JSON.stringify(players, null, '  '));
+})
+
+app.get('/plans', function(req, res) {
+    res.set({'content-type': 'application/json'});
+    res.end(JSON.stringify(plans, null, '  '));
+})
+
 
 server.listen(process.env.PORT || 8081,function(){
     console.log('Listening on '+server.address().port);
@@ -21,37 +34,56 @@ server.listen(process.env.PORT || 8081,function(){
 
 
 io.on('connection',function(socket){
+    socket.on('new_player', function(data, callback) {
+        // data.name
+
+        var player = {
+            id: nextId(players),
+            name: data.name,
+            socket_id: socket.id
+        }
+        players.push(player);
+        callback(null, player.id);
+    })
 
     socket.on('get_pyramid_plans', function(data, callback) {
         callback(null, plans);
     })
 
     socket.on('join_pyramid', function(data, callback) {
-        // data.name
+        // data.player_id
         // data.plan_id
-        console.log(data.name + ' is joining pyramid plan ' + data.plan_id)
 
-        var matching_plans = plans.filter(function(plan) {
-            return plan.id === data.plan_id;
-        })
+        var player = _.find(players, {id: data.player_id});
+        var plan = _.find(plans, {id: data.plan_id});
 
-        if (!matching_plans.length) { 
+        console.log(player.name + ' is joining pyramid plan ' + data.plan_id)
+
+        if (!plan) { 
             callback('Outdated plan ID');
             return;
         }
 
-        var plan = matching_plans[0];
-        // Todo: put the player on the plan somehow
+        // **db
+        player.plan_id = plan.id;
         
         socket.emit('notify', {message:'You joined this pyramid scheme! ' + JSON.stringify(plan)})
     })
 
-    socket.on('set_pyramid_plans', function(data, callback) {
-        // data: {name: 'me', plans:[ {product: X, rate:Y, amount:Z}, ... ]}
 
-        // Todo
+    // Player wants to set their rates for underling players
+    socket.on('set_pyramid_plan', function(data, callback) {
+        // data.player_id
+        // data.plan
+        // data.retired_plan_id
+
+        createPlan(data.player_id, data.plan);
+        
+        if (data.retired_plan) {
+            var old_plan = _.find(plans, {id: data.retired_plan_id});
+            retirePlan(old_plan);
+        }
     })
-
 
     // Boilerplate
 
@@ -59,6 +91,33 @@ io.on('connection',function(socket){
         console.log('test received');
     });
 });
+
+function nextId(collection) {
+    return _.maxBy(collection, 'id').id + 1;
+}
+
+function createPlan(player_id, plan) {
+    var player = _.find(players, {id: player_id});
+
+    plan.id = nextId(plans);
+    plan.player_id = player.id;
+    plan.distributor = player.name;
+        
+    plans.push(data.plan);
+}
+
+function retirePlan(old_plan_id) {
+    // Todo:
+    // - need to notify all the people who joined this plan 
+    // - give them a grace period
+    // - schedule an event to kick everyone off after the grace period
+
+    var old_plan = _.find(plans, old_plan_id);
+    var plan_participants = _.filter(players, {plan_id: old_plan.id});
+
+    // **db
+    old_plan.retired = true;
+}
 
 
 function randomInt (low, high) {
