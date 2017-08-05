@@ -38,6 +38,17 @@ Client.setPyramidPlan = function(plan) {
 
 // Notifications from server
 
+Client.socket.on('tick', function(data, callback) {
+    var diff = new Date() - new Date(data.time);
+    console.log('server tick=' + data.tick + ' diff=' + lag + 'ms');
+
+    // Check for inventory transfers
+})
+
+Client.socket.on('joined_plan' function(data, callback) {
+
+})
+
 Client.socket.on('notify', function(message, callback) {
     console.log('Notification from server:', message)
 })

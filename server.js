@@ -4,9 +4,14 @@ var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var _ = require('lodash');
 var moment = require('moment');
+var later = require('later');
 
 var plans = require('./server/plans');
 var players = require('./server/players');
+
+var settings = {
+    tick_seconds: 5 // send a synchronized tick to the clients every this-many seconds
+}
 
 
 app.use('/css',express.static(__dirname + '/css'));
@@ -93,6 +98,32 @@ io.on('connection',function(socket){
         console.log('test received');
     });
 });
+
+// Master timer to synchronize scheduled things
+var tick = 0;
+function doTick() {
+    tick += 1;
+    var time = moment().startOf('second');
+    console.log('Tick', tick, time.toString());
+
+    // Send tick to everyone
+    getAllSockets().forEach(function(socket) {
+        socket.emit('tick', {
+            time: time,
+            tick: tick
+        })
+    })
+}
+later.setInterval(doTick, later.parse.recur().every(settings.tick_seconds).second());
+
+
+// Internal functions
+
+function getAllSockets() {
+    return Object.keys(io.sockets.connected).map(function(socket_id) {
+        return io.sockets.connected[socket_id];
+    })
+}
 
 function nextId(collection) {
     return _.maxBy(collection, 'id').id + 1;
