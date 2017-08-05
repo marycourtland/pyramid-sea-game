@@ -33,4 +33,5 @@ Game.initPlayer = function(name) {
 Game.clickJoin = function() {
     var name = document.getElementById('input-name').value;
     Game.initPlayer(name);
+    document.getElementById('name').remove();
 }
