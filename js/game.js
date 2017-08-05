@@ -21,7 +21,7 @@ Game.create = function(){
     Client.getPyramidPlans(); // probably not needed
 
     // get this from the UI
-    Game.initPlayer('Me');
+    //Game.initPlayer('Me');
 };
 
 Game.initPlayer = function(name) {
@@ -29,4 +29,8 @@ Game.initPlayer = function(name) {
     // Player.init will be called after hearing back from server
 }
 
-
+// throwaway code?
+Game.clickJoin = function() {
+    var name = document.getElementById('input-name').value;
+    Game.initPlayer(name);
+}
