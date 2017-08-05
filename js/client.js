@@ -45,7 +45,7 @@ Client.socket.on('tick', function(data, callback) {
     // Check for inventory transfers
 })
 
-Client.socket.on('joined_plan' function(data, callback) {
+Client.socket.on('joined_plan', function(data, callback) {
 
 })
 
