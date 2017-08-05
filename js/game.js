@@ -18,6 +18,14 @@ Game.preload = function() {
 Game.create = function(){
     var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     testKey.onDown.add(Client.sendTest, this);
-    Client.getPyramids();
+    Client.getPyramidPlans();
+
+    Game.initPlayer('Me');
 };
+
+Game.initPlayer = function(name) {
+    Player.init(name);
+    Client.joinPyramid(0); // 0 is the starter pyramid
+}
+
 

@@ -7,20 +7,32 @@ Client.socket = io.connect();
 
 
 
-Client.getPyramids = function() {
-    Client.socket.emit('get_pyramids', {}, function(error, data) {
-            console.log('PYRAMIDS:', data)
-        })
+Client.getPyramidPlans = function() {
+    Client.socket.emit('get_pyramid_plans', {}, function(error, data) {
+        console.log('PYRAMIDS:', data)
+        // show these on the ui
+    })
 }
 
-Client.joinPyramid = function(pyramid) {
-    Client.socket.emit('join_pyramid', {pyramid: pyramid, name: 'me'});
+Client.joinPyramid = function(plan_id) {
+    Client.socket.emit('join_pyramid', {plan_id: plan_id, name: 'me'});
 }
 
-Client.setPyramidDeal = function(deals) {
-    //data: {name: 'me', deals:[ {product: X, rate:Y, amount:Z}, ... ]}
-    Client.socket.emit('set_pyramid_deal', {name: 'me', deals: deals})
+// For when someone wants to set their distribution rates for other players
+// Not sure if server should set the ID or not
+Client.setPyramidPlans = function(plans) {
+    //data: {name: 'me', plans:[ {id:123, product: X, rate:Y, amount:Z, price:P}, ... ]}
+    Client.socket.emit('set_pyramid_plans', {
+        name: Player.name,
+        plans: plans
+    })
 }
+
+// Notifications from server
+
+Client.socket.on('notify', function(message, callback) {
+    console.log('Notification from server:', message)
+})
 
 
 // Boilerplate
@@ -30,31 +42,3 @@ Client.sendTest = function(){
     console.log("test sent");
     Client.socket.emit('test');
 };
-
-Client.askNewPlayer = function(){
-    Client.socket.emit('newplayer');
-};
-
-Client.sendClick = function(x,y){
-  Client.socket.emit('click',{x:x,y:y});
-};
-
-Client.socket.on('newplayer',function(data){
-    Game.addNewPlayer(data.id,data.x,data.y);
-});
-
-Client.socket.on('allplayers',function(data){
-    for(var i = 0; i < data.length; i++){
-        Game.addNewPlayer(data[i].id,data[i].x,data[i].y);
-    }
-
-    Client.socket.on('move',function(data){
-        Game.movePlayer(data.id,data.x,data.y);
-    });
-
-    Client.socket.on('remove',function(id){
-        Game.removePlayer(id);
-    });
-});
-
-
