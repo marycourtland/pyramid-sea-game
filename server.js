@@ -3,6 +3,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
 var _ = require('lodash');
+var moment = require('moment');
 
 var plans = require('./server/plans');
 var players = require('./server/players');
@@ -39,6 +40,7 @@ io.on('connection',function(socket){
 
         var player = {
             id: nextId(players),
+            created_time: moment(),
             name: data.name,
             socket_id: socket.id
         }
@@ -102,7 +104,11 @@ function createPlan(player_id, plan) {
     plan.id = nextId(plans);
     plan.player_id = player.id;
     plan.distributor = player.name;
+    plan.created_time = moment();
+    plan.retired_time = null;
+    plan.retired = false;
         
+    //**db
     plans.push(data.plan);
 }
 
@@ -117,6 +123,7 @@ function retirePlan(old_plan_id) {
 
     // **db
     old_plan.retired = true;
+    old_plan.retired_time = moment();
 }
 
 

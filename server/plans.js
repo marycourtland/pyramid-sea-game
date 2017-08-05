@@ -3,11 +3,15 @@
 
 // If player_id is null, it's an NPC
 
+var moment = require('moment');
+
 var plans = module.exports = [
     {
         id: 0,
         player_id: null,
         distributor: 'StarterBoss',
+        created_time: moment(),
+        retired_time: null,
         cut: 0.8, // how much the distributor takes (a lot)
         retired: false,
         products: [
@@ -24,6 +28,8 @@ var plans = module.exports = [
         id: 1,
         player_id: null,
         distributor: 'SomeoneElse',
+        created_time: moment(),
+        retired_time: null,
         cut: 0.6,
         retired: false,
         products: [
