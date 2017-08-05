@@ -40,7 +40,7 @@ Client.setPyramidPlan = function(plan) {
 
 Client.socket.on('tick', function(data, callback) {
     var diff = new Date() - new Date(data.time);
-    console.log('server tick=' + data.tick + ' diff=' + lag + 'ms');
+    console.log('server tick=' + data.tick + ' diff=' + diff + 'ms');
 
     // Check for inventory transfers
 })
