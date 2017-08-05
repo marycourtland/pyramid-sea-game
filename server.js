@@ -26,7 +26,7 @@ io.on('connection',function(socket){
     socket.on('join_pyramid', function(data, callback) {
         // data.name
         // data.pyramid
-        console.log(data.name + ' is joining ' data.pyramid)
+        console.log(data.name + ' is joining ' + data.pyramid)
     })
 
     socket.on('set_pyramid_deal', function(data, callback) {

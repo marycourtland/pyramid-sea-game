@@ -20,7 +20,7 @@ Client.joinPyramid = function(pyramid) {
 Client.setPyramidDeal = function(deals) {
     //data: {name: 'me', deals:[ {product: X, rate:Y, amount:Z}, ... ]}
     Client.socket.emit('set_pyramid_deal', {name: 'me', deals: deals})
-}}
+}
 
 
 // Boilerplate
