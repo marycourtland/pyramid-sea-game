@@ -6,17 +6,20 @@ var customerSettings = {
 					'min': 18,
 					'max': 29,
 					'prefs': {'slang': 'success', 'professional': 'fail', 'cordial': 'moderate'},
-					'name':["Kaiden", "Paige", "Spirit", "Khaleesi", "Banana", "Raindbow", "Roxie"]},
+					'name':["Kaiden", "Paige", "Spirit", "Khaleesi", "Banana", "Raindbow", "Roxie"],
+					'images': ['teen_convo_1', 'teen_convo_2', 'teen_convo_3']},
 				   {'this': 'professional',
 			   		'min': 30,
  			   		'max': 59,
  			   		'prefs': {'slang': 'fail', 'professional': 'success', 'cordial': 'moderate'},
-					'name':["Thomas", "Janet", "Ricky", "Stevie", "Larry", "Shirley", "Jerry"]},
+					'name':["Thomas", "Janet", "Ricky", "Stevie", "Larry", "Shirley", "Jerry"],
+					'images': ['middle_convo_1', 'middle_convo_2', 'middle_convo_3']},
 				   {'this': 'elder',
 			   		'min': 60,
   			   		'max': 89,
   			   		'prefs': {'slang': 'fail', 'professional': 'moderate', 'cordial': 'success'},
-					'name':["Archibald", "Harriet", "Humphrey", "Gertrude","Bertha", "Franklin"]}],
+					'name':["Archibald", "Harriet", "Humphrey", "Gertrude","Bertha", "Franklin"],
+					'images': ['aged_convo_1', 'aged_convo_2', 'aged_convo_3']}],
 	'region_reactions': {'fail': [-20,-5], 'moderate': [0,15], 'success': [20,40]},
 	'regions': [{'this': 'canada',
 				 'prefs': {'canada':'success', 'ne':'moderate', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'moderate'},
@@ -133,6 +136,7 @@ function generateCustomer() {
 	customer['persona'] = randomValue(customerSettings.personas);
 	customer['occupation'] = randomValue(customer.persona.occupations);
 	customer['responses'] = [];
+	customer['image'] = randomValue(customer.age_group.images);
 
 	return customer;
 }
