@@ -47,10 +47,16 @@ io.on('connection',function(socket){
             id: nextId(players),
             created_time: moment(),
             name: data.name,
-            socket_id: socket.id
+            socket_id: socket.id,
+
+            // Initial player resources
+            bank_account: 1000,
+            clout: 0,
+            inventory: {}
         }
+
         players.push(player);
-        callback(null, player.id);
+        callback(null, player);
     })
 
     socket.on('get_pyramid_plans', function(data, callback) {
@@ -63,7 +69,6 @@ io.on('connection',function(socket){
 
         var player = _.find(players, {id: data.player_id});
         var plan = _.find(plans, {id: data.plan_id});
-
         console.log(player.name + ' is joining pyramid plan ' + data.plan_id)
 
         if (!plan) { 
@@ -113,6 +118,25 @@ function doTick() {
             tick: tick
         })
     })
+
+    // See if there are any plan transactions to process
+    // (the frequencies are per-product)
+
+    var active_plans = []; // this is a list of [plan, products] pairs
+    // (the whole array of plan products might not be processed each time -
+    // just the ones with the right frequency)
+
+    plans.forEach(function(plan) {
+        var products = _.filter(plan.products, function(item) {
+            return tick % item.frequency === 0;
+        })
+
+        if (products.length > 0) active_plans.push([plan, products]);
+    })
+
+    active_plans.forEach(function(plan_products) {
+        doPlanTransfers(plan_products[0], plan_products[1]);
+    })
 }
 later.setInterval(doTick, later.parse.recur().every(settings.tick_seconds).second());
 
@@ -123,6 +147,10 @@ function getAllSockets() {
     return Object.keys(io.sockets.connected).map(function(socket_id) {
         return io.sockets.connected[socket_id];
     })
+}
+
+function getSocketById(socket_id) {
+    return io.sockets.connected[socket_id];
 }
 
 function nextId(collection) {
@@ -141,6 +169,8 @@ function createPlan(player_id, plan) {
         
     //**db
     plans.push(data.plan);
+
+    player.offered_plan_id = plan.id;
 }
 
 function retirePlan(old_plan_id) {
@@ -157,7 +187,90 @@ function retirePlan(old_plan_id) {
     old_plan.retired_time = moment();
 }
 
+// the products passed in should be a subset of plan.products
+function doPlanTransfers(plan, products) {
+    console.log('doPlanTransfers', plan.id, products.map(function(p) { return p.product; }).join(','))
+    // The person selling the product (* might not exist if it's a non-player plan)
+    var distributor = _.find(players, {id: plan.player_id});
 
-function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
+    // The people buying the product
+    var receivers = _.filter(players, {plan_id: plan.id});
+
+
+    // How much the distributor will end up getting
+    // (it could also just be multiplied out)
+    var total_transaction_amount = 0; 
+
+    receivers.forEach(function(player) {
+        // Money
+        var amount = products.reduce(function(total, item) {
+            return total + item.price_per_unit * item.quantity;
+        }, 0);
+
+        total_transaction_amount += amount;
+        updateBankAccount(player.id, -amount);
+
+        // Inventory
+        products.forEach(function(item) {
+            updateInventory(player.id, item.product, item.quantity);
+        })
+    })
+
+    // Deposit into distributor's account
+    // ** Except if the distributor has a boss, they'll take a cut, too
+    if (distributor) {
+        // this is the "grandfather" plan that defines the cut going to the distributor's boss
+        var distributor_plan = _.get(plans, {id: distributor.plan_id})
+        var remainder_after_cut = total_transaction_amount;
+        if (distributor_plan) {
+            var boss = _.get(players, {id: distributor})
+            var boss_cut = distributor_plan.cut * total_transaction_amount;
+            remainder_after_cut -= boss_cut;
+
+            // if boss exists, it's a player
+            if (boss) {
+                updateBankAccount(boss.id, boss_cut);
+            }
+        }
+
+        updateBankAccount(distributor.id, remainder_after_cut);
+
+        products.forEach(function(item) {
+            var total_inventory_deduction = item.quantity * receivers.length;
+            updateInventory(distributor.id, item.product, -total_inventory_deduction);
+        })
+    }
+    else {
+        // it's a non-player; do nothing
+    }
 }
+
+
+// Pass in a negative amount if it's a deduction
+function updateBankAccount(player_id, amount) {
+    var player = _.find(players, {id: player_id});
+
+    player.bank_account += amount;
+
+    getSocketById(player.socket_id).emit('current_bank_balance', {
+        player_id: player_id, //not strictly necessary
+        balance: player.bank_account,
+        change: amount
+    })
+}
+
+// Pass in a negative quantity if it's a deduction
+function updateInventory(player_id, product, quantity) {
+    var player = _.find(players, {id: player_id});
+
+    if (!(product in player.inventory)) { player.inventory[product] = 0; }
+    player.inventory[product] += quantity;
+
+    getSocketById(player.socket_id).emit('current_inventory', {
+        player_id: player_id, //not strictly necessary
+        product: product,
+        quantity: player.inventory[product],
+        change: quantity
+    })
+}
+

@@ -6,8 +6,10 @@ var Client = {};
 Client.socket = io.connect();
 
 Client.newPlayer = function(name) {
-    Client.socket.emit('new_player', {name: name}, function(error, player_id) {
-        Player.init(name, player_id);
+    Client.socket.emit('new_player', {name: name}, function(error, player) {
+        Player.init(name, player.id);
+
+        // todo: copy over the rest of the player vars...?
     })
 }
 
@@ -47,6 +49,23 @@ Client.socket.on('tick', function(data, callback) {
 
 Client.socket.on('joined_plan', function(data, callback) {
 
+})
+
+Client.socket.on('current_bank_balance', function(data, callback) {
+    // data.player_id
+    // data.balance
+    // data.change
+    var change_string = data.change < 0 ? data.change.toString() : '+' + data.change;
+    console.log('Bank balance: ' + change_string + ' => ' + data.balance);
+})
+
+Client.socket.on('current_inventory', function(data, callback) {
+    // data.player_id
+    // data.product
+    // data.quantity
+    // data.change
+    var change_string = data.change < 0 ? data.change.toString() : '+' + data.change;
+    console.log('Inventory for ' + data.product + ": " + change_string + ' => ' + data.quantity);
 })
 
 Client.socket.on('notify', function(message, callback) {

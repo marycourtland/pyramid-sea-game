@@ -3,6 +3,7 @@ var Player = {};
 Player.init = function(name, id) {
     this.id = id;
     this.name = name;
+    this.plan = null;
 
     // stats here?
 
@@ -15,18 +16,12 @@ Player.resetResources = function() {
     this.bank = 100;
     this.clout = 0;
 
-    // pull these from elsewhere
-    this.plans = [
-        {
-            product: 'widgets',
-            rate: 10,
-            amount: 10
-        }
-    ]
-
     this.inventory = {
         widgets: 50
     }
 }
 
+Player.setPlan = function(plan) {
+    this.plan = plan;
+}
 

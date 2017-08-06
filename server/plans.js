@@ -17,9 +17,9 @@ var plans = module.exports = [
         products: [
             {
                 product: 'widgets',
-                price: 10,   // how much people pay each time
-                amount: 10,  // amount to transfer each time
-                rate: 1 // per minute?
+                price_per_unit: 10,   // how much people pay per unit, each time
+                quantity: 10,  // number of units to transfer each time
+                frequency: 12  // transactions processed every this-many ticks
             }
         ]
     },
@@ -35,15 +35,15 @@ var plans = module.exports = [
         products: [
             {
                 product: 'widgets',
-                price: 15,
-                amount: 10,
-                rate: 1
+                price_per_unit: 15,
+                quantity: 10,
+                frequency: 12
             },
             {
                 product: 'air',
-                price: 9999,
-                amount: 10,
-                rate: 1
+                price_per_unit: 9999,
+                quantity: 10,
+                frequency: 12
             }
         ]
     },
