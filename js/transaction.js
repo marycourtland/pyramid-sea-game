@@ -147,11 +147,15 @@ var transaction = {};
 function startTransaction(customer) {
 	transaction.customer = customer;
 	transaction.level = 0;
+	transaction.last_response = null;
 	return transaction;
 }
 
 transaction.getNextDialog = function(response) {
-	var result = getCustomerDialogResponse(transaction.level, response, transaction.customer);
+	if (response != transaction.last_response && response != null) {
+		transaction.last_response = response;
+	}
+	var result = getCustomerDialogResponse(transaction.level, transaction.last_response, transaction.customer);
 	if (transaction.level == 3 && response == 'recruit') {
 		transaction.level = 8;
 	} else {
