@@ -48,7 +48,15 @@ Client.socket.on('tick', function(data, callback) {
 })
 
 Client.socket.on('joined_plan', function(data, callback) {
+    // data.plan
+    console.log('You joined this plan! ' + JSON.stringify(data.plan))
+})
 
+Client.socket.on('someone_joined_your_plan', function(data, callback) {
+    // data.player_id
+    // data.name
+    // data.plan
+    console.log('Someone joined your plan!', data.name, data.player_id);
 })
 
 Client.socket.on('current_bank_balance', function(data, callback) {

@@ -79,7 +79,18 @@ io.on('connection',function(socket){
         // **db
         player.plan_id = plan.id;
         
-        socket.emit('notify', {message:'You joined this pyramid scheme! ' + JSON.stringify(plan)})
+        socket.emit('joined_plan', {plan: plan});
+        emitToPlayer(player, 'joined_plan', {plan: plan})
+
+        //Notify the plan's distributor/boss
+        var plan_distributor = _.find(players, {id: plan.player_id})
+        if (plan_distributor) {
+            emitToPlayer(plan_distributor, 'someone_joined_your_plan', {
+                player_id: player.id,
+                name: player.name,
+                plan: plan
+            })
+        }
     })
 
 
@@ -153,6 +164,12 @@ function getSocketById(socket_id) {
     return io.sockets.connected[socket_id];
 }
 
+function emitToPlayer(player, event, data) {
+    var socket = getSocketById(player.socket_id);
+    if (!socket) return;
+    socket.emit(event, data);
+}
+
 function nextId(collection) {
     return _.maxBy(collection, 'id').id + 1;
 }
@@ -223,7 +240,7 @@ function doPlanTransfers(plan, products) {
         var distributor_plan = _.get(plans, {id: distributor.plan_id})
         var remainder_after_cut = total_transaction_amount;
         if (distributor_plan) {
-            var boss = _.get(players, {id: distributor})
+            var boss = _.get(players, {id: distributor_plan.player_id})
             var boss_cut = distributor_plan.cut * total_transaction_amount;
             remainder_after_cut -= boss_cut;
 
@@ -252,7 +269,7 @@ function updateBankAccount(player_id, amount) {
 
     player.bank_account += amount;
 
-    getSocketById(player.socket_id).emit('current_bank_balance', {
+    emitToPlayer(player, 'current_bank_balance', {
         player_id: player_id, //not strictly necessary
         balance: player.bank_account,
         change: amount
@@ -266,7 +283,7 @@ function updateInventory(player_id, product, quantity) {
     if (!(product in player.inventory)) { player.inventory[product] = 0; }
     player.inventory[product] += quantity;
 
-    getSocketById(player.socket_id).emit('current_inventory', {
+    emitToPlayer(player, 'current_inventory', {
         player_id: player_id, //not strictly necessary
         product: product,
         quantity: player.inventory[product],
