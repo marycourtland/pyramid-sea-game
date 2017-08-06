@@ -13,10 +13,10 @@ Client.newPlayer = function(name) {
     })
 }
 
-Client.getPyramidPlans = function() {
+Client.getPyramidPlans = function(callback) {
     Client.socket.emit('get_pyramid_plans', {}, function(error, plans) {
         console.log('PYRAMIDS:', plans)
-        // show these on the ui
+        callback(plans);
     })
 }
 
