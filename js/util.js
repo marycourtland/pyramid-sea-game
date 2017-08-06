@@ -16,6 +16,16 @@ function addRectangle(x, y, w, h, rgb) {
     return sprite;
 }
 
+function addButton(parent, x, y, w, h, text, callback) {
+    var button = new SlickUI.Element.Button(x, y, w, h);
+    parent.add(button);
+    button.inputEnabled = true;
+    button.events.useHandCursor = true;
+    button.events.onInputUp.add(callback);
+    button.add(new SlickUI.Element.Text(0,0, text)).center();
+    return button;
+}
+
 // HTML textbox overlaid on phaser
 function addTextBox(id, x, y, w, placeholder) {
     placeholder = placeholder || "";

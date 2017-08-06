@@ -6,17 +6,18 @@ JoinGame.preload = function() {
 
 JoinGame.create = function() {
     game.stage.backgroundColor = "#949292";
+    //game.add.sprite(0, 0, 'main-office');
 
     var margin = 100;
     var panel = new SlickUI.Element.Panel(margin, margin, game.width - 2*margin, game.height - 2*margin);
     game.slickUI.add(panel);
-    panel.add(new SlickUI.Element.Text(10,10, "Welcome, new partner! What's your name?")).centerHorizontally()
+    panel.add(new SlickUI.Element.Text(10,40, "Welcome, new Partner! Please sign here.")).centerHorizontally()
 
     addTextBox('name_input',
-        margin+20,
-        margin+80,
-        game.width - 2*margin - 40,
-        "What's your name?"
+        margin+40,
+        margin+120,
+        game.width - 2*margin - 80,
+        ""
     );
 
     var enter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);

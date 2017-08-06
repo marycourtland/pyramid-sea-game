@@ -7,8 +7,14 @@ BrowsePlans.preload = function() {
 }
 
 BrowsePlans.create = function() {
-    var testKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-    testKey.onDown.add(Client.sendTest, this);
+    addButton(game.slickUI,
+        hud_margin,
+        hud_margin,
+        button_w,
+        button_h,
+        'Back to Office',
+        function() { game.state.start('MainOffice') }
+    );  
 
     var self = this;
 
@@ -44,6 +50,13 @@ BrowsePlans.create = function() {
 
         // sky
         game.stage.backgroundColor = "#e2f6ff";
+
+        // character
+        var character = game.add.sprite(20, street_Y, 'character-walking');
+        character.animations.add('walking');
+        var numFrames = 4;
+        character.animations.play('walking', 10, true);
+
 
         // Plan details 
         // TODO: wire up the correct selected plan

@@ -27,10 +27,15 @@ Game.preload = function() {
 
     game.load.spritesheet('customer_cards', 'assets/sprites/customer_cards.png', 320, 160);
     game.load.image('character', 'assets/sprites/hub_world_character.png');
+    game.load.spritesheet('character-walking', 'assets/sprites/Hub-world-walk-cycle.png', 32, 32, 4);
+    game.load.image('main-office', 'assets/Desk-Scene.png');
 
     //Buildings
     game.load.image('building_1', 'assets/buildings/lavender_tower.png');
     game.load.image('building_2', 'assets/buildings/khaki_block.png');
+    game.load.image('building_3', 'assets/buildings/Onyx_tower.png');
+    game.load.image('building_4', 'assets/buildings/Rose_tower.png');
+    game.load.image('building_5', 'assets/buildings/Sapphire_tower.png');
 
     //Products
     game.load.image('product_bottled_air', 'assets/products/Bottled-Air.png');
