@@ -1,104 +1,122 @@
 var transaction_id;
 
 var customerSettings = {
-	'age_group_reactions': {'fail': [28,40], 'moderate': [20,30], 'success': [10,22]},
+	'age_group_reactions': {'fail': [10,22], 'moderate': [20,30], 'success': [31,40]},
 	'age_groups': [{'this': 'youth',
 					'min': 18,
 					'max': 29,
-					'prefs': {'slang': 'success', 'professional': 'fail', 'cordial': 'moderate'}},
+					'prefs': {'slang': 'success', 'professional': 'fail', 'cordial': 'moderate'},
+					'name':["Kaiden", "Paige", "Spirit", "Khaleesi", "Banana", "Raindbow", "Roxie"]},
 				   {'this': 'professional',
 			   		'min': 30,
  			   		'max': 59,
- 			   		'prefs': {'slang': 'fail', 'professional': 'success', 'cordial': 'moderate'}},
+ 			   		'prefs': {'slang': 'fail', 'professional': 'success', 'cordial': 'moderate'},
+					'name':["Thomas", "Janet", "Ricky", "Stevie", "Larry", "Shirley", "Jerry"]},
 				   {'this': 'elder',
 			   		'min': 60,
   			   		'max': 89,
-  			   		'prefs': {'slang': 'fail', 'professional': 'moderate', 'cordial': 'success'}}],
-	'region_reactions': {'fail': [-20,5], 'moderate': [0,15], 'success': [20,40]},
+  			   		'prefs': {'slang': 'fail', 'professional': 'moderate', 'cordial': 'success'},
+					'name':["Archibald", "Harriet", "Humphrey", "Gertrude","Bertha", "Franklin"]}],
+	'region_reactions': {'fail': [-20,-5], 'moderate': [0,15], 'success': [20,40]},
 	'regions': [{'this': 'canada',
-				 'prefs': {'canada':'success', 'ne':'moderate', 'texas':'fail', 'south':'fail', 'cal':'fail', 'pnw':'moderate'}},
+				 'prefs': {'canada':'success', 'ne':'moderate', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'moderate'},
+				 'region':["Toronto", "Montreal", "Calgary", "Vancouver", "Winnipeg"]},
 				{'this': 'ne',
-				 'prefs': {'canada':'moderate', 'ne':'success', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'pnw':'fail'}},
+				 'prefs': {'canada':'moderate', 'ne':'success', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'midwest':'fail'},
+				 'region':["Brooklyn", "Boston", "Hartford", "Philadelphia", "Buffalo"]},
 				{'this': 'texas',
-				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'moderate', 'cal':'moderate', 'pnw':'fail'}},
+				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'moderate', 'cal':'moderate', 'midwest':'fail'},
+				 'region':["Oklahoma City", "Austin", "Dallas", "Reno", "Kansas City"]},
 				{'this': 'south',
-				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'moderate', 'south':'success', 'cal':'fail', 'pnw':'fail'}},
+				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'moderate', 'south':'success', 'cal':'fail', 'midwest':'fail'},
+				 'region': ["Atlanta", "Nashville", "Little Rock", "New Orleans", "Charlotte"]},
 				{'this': 'cal',
-				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'moderate', 'south':'fail', 'cal':'success', 'pnw':'moderate'}},
-				{'this': 'pnw',
-				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'pnw':'success'}}],
-	'disposition': {'min': 0, 'max': 40},
-	'persona_reactions': {'fail': [-30,-5], 'success': [5,30]},
+				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'moderate', 'south':'fail', 'cal':'success', 'midwest':'moderate'},
+				 'region':["Long Beach", "San Francisco", "Portland", "Seattle", "Oakland"]},
+				{'this': 'midwest',
+				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'midwest':'success'},
+				 'region':["Minneapolis", "Fargo", "Milwaukee", "Cleveland", "Chicago"]}],
+	'disposition': {'min': 0, 'max': 0},
+	'persona_reactions': {'fail': [-30,-20], 'moderate': [-5,5], 'success': [20,30]},
 	'personas': [{'this': 'elitist',
-	 			  'prefs': {'air':'success', 'grass':'fail', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail'}},
+	 			  'prefs': {'scented':'success', 'grass':'fail', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh' :'moderate'},
+				  'occupations': ["CEO", "Venture Capitalist", "Entrepreneur", "Hedge Fund Manager", "Philanthropist"]},
 				 {'this': 'hippy',
- 			 	  'prefs': {'air':'fail', 'grass':'success', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail'}},
+ 			 	  'prefs': {'scented':'fail', 'grass':'success', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh':'moderate'},
+				  'occupations':["Spirit Healer", "Shaman", "Yoga Guru", "Palm Reader", "Horse Whisperer"]},
 				 {'this': 'house-spouse',
-  			 	  'prefs': {'air':'fail', 'grass':'fail', 'bunnies':'success', 'pollen':'fail', 'saltwater':'fail'}},
+  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'moderate', 'pollen':'success', 'saltwater':'fail', 'fresh':'moderate'},
+				  'occupations': ["Unemployed", "Home-maker", "Full Time Parent", "Kindergarten Teacher", "Part-time Nanny"]},
 				 {'this': 'trendy',
-  			 	  'prefs': {'air':'fail', 'grass':'fail', 'bunnies':'fail', 'pollen':'success', 'saltwater':'fail'}},
+  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'fail', 'pollen':'moderate', 'saltwater':'fail', 'fresh':'success'},
+				  'occupations': ["Meme maker", "Musician", "Artist", "Model", "Taste-maker"]},
 				 {'this': 'collector',
-  			 	  'prefs': {'air':'fail', 'grass':'fail', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'success'}}],
-	'names': ['Bob', 'Susie', 'Evan', 'Jerome', 'Chris', 'Robin']
+  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'success', 'pollen':'fail', 'saltwater':'moderate', 'fresh':'fail'},
+				  'occupations': ["Appraiser", "Historian", "Librarian", "Hoarder", "Museum Tour Guide"]}]
 }
 
 var dialogTree = {
 	// Customer opening lines
 	0: {'success': ["Hello?", "Who is this?"]},
 	// Player age-based greeting
-	1: {'slang': ["This is slang."],
-		'professional': ["This is professional speak."],
-		'cordial': ["This is cordial."] },
+	1: {'slang': [["'Sup, how's it goin'? I'm "," and got this hella sick deal for you"]],
+		'professional': [["Hi, I'm ",". I know you're busy, but let me quickly tell you about this offer."]],
+		'cordial': [["Good day to you, my name is ", ". I'd love a moment of your time to talk about an offer."]]},
 	// Customer response to greeting
-	2: {'fail': {'youth': ["Young fail."],
-				 'professional': ["Middle-aged fail."],
-				 'elder': ["Old fail."]},
-	    'moderate': {'youth': ["Young meh."],
-   	    			 'professional': ["Middle-aged meh."],
-   	    			 'elder': ["Old meh."]},
-	    'success': {'youth': ["Young win."],
-   	    			'professional': ["Middle-aged win."],
-   	    			'elder': ["Old win."]}},
-	3: {'product': ["[Try selling product.]"],
-		  'recruit': ["[Try pitching recruitment.]"]},
+	2: {'fail': {'youth': ["This sounds lame..."],
+				 'professional': ["This is sounding like a waste of time."],
+				 'elder': ["I don't have all the time in the world, you know."]},
+	    'moderate': {'youth': ["Whatevs"],
+   	    			 'professional': ["Get on with it."],
+   	    			 'elder': ["If you must"]},
+	    'success': {'youth': ["Oh sick, tell me more"],
+   	    			'professional': ["Okay, I can spare a minute!"],
+   	    			'elder': ["Oh, well that sounds wonderful, I'm all ears!"]}},
+	3: {'product': ["[Sell Product]"],
+		  'recruit': ["[Pitch Recruit]"]},
 	// Player offers a product
-	4: {'air': ["Would you like some air?"],
-		'grass': ["Would you like some grass? Not the good stuff."],
-		'bunnies': ["Want a dust bunny?"],
-		'pollen': ["Would you like pollen?"],
-		'saltwater': ["Want salt water? Only 70% of Earth covered by it."]},
+	4: {'scented': ["We have an unbelievable deal on Hand-crafted Luxury Scented Air!"],
+		'fresh': ["I'm able to offer you Premium Free-Range Imported Air!"],
+		'bunnies': ["I have Antique Decorative Collectible Dust Bunnies at an incredible discount!"],
+		'dirt': ["I have access to Organic Imported Fresh Dirt"],
+		'pollen': [" I have 100% Genuine Seasonal Pollen for the home, so low it's insane!"],
+		'saltwater': ["I have a select Artisanal Blended Saltwater that I'm able to offer and a fraction of it's cost!"]},
 	// Customer response to product offering
-	5: {'fail': {'youth': ["Young fail."],
-				 'professional': ["Middle-aged fail."],
-				 'elder': ["Old fail."]},
-	    'moderate': {'youth': ["Young meh."],
-   	    			 'professional': ["Middle-aged meh."],
-   	    			 'elder': ["Old meh."]},
-	    'success': {'youth': ["Young win."],
-   	    			'professional': ["Middle-aged win."],
-   	    			'elder': ["Old win."]}},
+	5: {'fail': {'youth': ["Chill on the scams bro."],
+				 'professional': ["Wow, this is a scam."],
+				 'elder': ["Shame on you for trying to scam the elderly."]},
+	    'moderate': {'youth': ["That's cool, I guess..."],
+   	    			 'professional': ["I've heard of worse things..."],
+   	    			 'elder': ["I think I'm a bit to out of touch for this..."]},
+	    'success': {'youth': ["Amazeballs! That sound like literally the best thing ever!"],
+   	    			'professional': ["Well that's a sound investment indeed!"],
+   	    			'elder': ["Oh well ain't that just dandy!"]}},
 	// Player price product close price
 	6: {'offer': [["I'll put you down for one at ", " dollars."]]},
 	// Customer response to product close price
-	7: {false: {'youth': ["Young fail."],
-				 'professional': ["Middle-aged fail."],
-				 'elder': ["Old fail."]},
-	    true: {'youth': ["Young win."],
-   	    			'professional': ["Middle-aged win."],
-   	    			'elder': ["Old win."]}},
+	7: {false: {'youth': ["Wow, Seriously, bro? Bye Felicia!"],
+				 'professional': ["You can’t be serious? Good-bye"],
+				 'elder': ["That's criminal and should be ashamed of yourself! Good evening!"]},
+	    true: {'youth': ["Oh, legit!"],
+   	    			'professional': ["Got to spend it, to make it!"],
+   	    			'elder': ["Oh well that's just the bee's knees"]}},
 	// Player region-based recruitment offering
-	8: {'canada': ["This is Canada speak. Would you like to work for me?"],
-		'ne': ["Something New England-like. Would you like to work for me?"],
-		'texas': ["Texas talk. Would you like to work for me?"],
-		'south': ["Southern drawl. Would you like to work for me?"],
-		'pnw': ["This is the language of PNW. Would you like to work for me?"],
-		'cal': ["How one speaks in California, dude. Would you like to work for me?"] },
-	9: {false: {'youth': ["Young fail."],
-				 'professional': ["Middle-aged fail."],
-				 'elder': ["Old fail."]},
-	    true: {'youth': ["Young win."],
-   	    			'professional': ["Middle-aged win."],
-   	    			'elder': ["Old win."]}}
+	8: {'canada': ["How’s aboot another good deal, eh?"],
+		'ne': ["Now I know a wicked Smaht person like you knows a deal, am I right?!"],
+		'texas': ["I can’t see a good ol’ boy/gal like you passing on this great deal!"],
+		'south': ["I’m fixin’ to tell you about a deal that’ll knock y’all socks right on off!"],
+		'midwest': ["Well, you betcha, I’ve got quite the deal for you, dontcha know."],
+		'cal': ["I got this gnarly deal you’re going to totally flip over."] },
+	9: {false: {'youth': ["Oh this is totes a scam. Scammer no scamming bro!"],
+				 'professional': ["I recognize this scam. I’ll be contacting the BBB"],
+				 'elder': ["I’m too old to fall for that scam. Please don’t call here again."]},
+	    true: {'youth': ["This requires a selfie"],
+   	    			'professional': ["This sounds like a great opportunity."],
+   	    			'elder': ["This is going to pay for all the grandkids presents"]}},
+	// Scam
+	10: {'youth': ["This is totally not a scam, though, right?"],
+		'professional': ["Any guarantee this isn’t a scam?"],
+		'elder': ["You’re not just trying to scam a senior, are you?"]}
 	// TODO: Consider adding a 10 and 11 where you offer a recruiting percentage.
 }
 
@@ -106,13 +124,14 @@ function generateCustomer() {
 	var customer = {};
 	customer['age_group'] = randomValue(customerSettings.age_groups);
 	customer['age'] = randomInt(customer.age_group.min, customer.age_group.max);
-	customer['name'] = randomValue(customerSettings.names);
+	customer['name'] = randomValue(customer.age_group.name);
 	customer['region'] = randomValue(customerSettings.regions);
-	customer['location'] = randomValue(customer.region);
+	customer['location'] = randomValue(customer.region.region);
 	customer['disposition'] = randomInt(customerSettings.disposition.min,
 										customerSettings.disposition.max);
 	customer['positivity'] = 0;
 	customer['persona'] = randomValue(customerSettings.personas);
+	customer['occupation'] = randomValue(customer.persona.occupations);
 	customer['responses'] = [];
 
 	return customer;
@@ -143,7 +162,8 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		result['options'] = getPlayerDialogOptions(1, null);
 	} else if (dialog_level == 1) {
 		result['speaker'] = 'player';
-		result['dialog'] = randomValue(dialogTree[dialog_level][response]);
+		var dialog = randomValue(dialogTree[dialog_level][response]);
+		result['dialog'] = dialog[0] + Player.name + dialog[1];
 		result['positivity_change'] = 0;
 	} else if (dialog_level == 2) {
 		result['speaker'] = 'customer';
@@ -179,7 +199,11 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		result['reaction'] = productClose(customer);
 		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction[0]][customer.age_group.this]);
 		result['positivity_change'] = 0;
-		//Client.sendProductClose(result.reaction, customer);
+		var products = {};
+		if (result.reaction[0]) {
+			products = [{product: result.reaction[1], price_per_unit: result.reaction[2], quantity: 1}];
+		}
+		//Client.sendCustomerTransaction(products, result.reaction[3]);
 	} else if (dialog_level == 8) {
 		result['speaker'] = 'player';
 		result['dialog'] = randomValue(dialogTree[dialog_level][response]);
@@ -190,7 +214,7 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		result['reaction'] = recruitClose(customer);
 		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction[0]][customer.age_group.this]);
 		result['positivity_change'] = 0;
-		//Client.sendProductClose(result.reaction, customer);
+		//Client.sendCustomerRecruitment(result.reaction[1]);
 	}
 	// below handles dialog_level 7 and 9, where pushed early
 	if (customer.responses.length <= dialog_level) { customer.responses.push(response); }
