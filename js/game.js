@@ -40,22 +40,24 @@ Game.preload = function() {
 };
 
 Game.create = function(){
+ 
+    // set up container for HTML elements
+    var $canvas = $("#game canvas");
+    $("#game-html").css({
+        top: $canvas.offset().top,
+        left: $canvas.offset().left,
+        width: game.width,
+        height: game.height
+    })
+
+    // Make sure the html gets cleared on state change
+    var _start_state = game.state.start;
+    game.state.start = function() {
+        $("#game-html").empty();
+        _start_state.apply(game.state, arguments);
+    }
+
+    game.state.start('JoinGame');
+
 };
-
-
-Game.initPlayer = function(name) {
-    Client.newPlayer(name);
-    // Player.init will be called after hearing back from server
-}
-
-// throwaway code?
-Game.clickJoin = function() {
-    var name = document.getElementById('input-name').value;
-    Game.initPlayer(name);
-    document.getElementById('name').remove();
-
-    // testing!
-    game.state.start('BrowsePlans');
-}
-
 

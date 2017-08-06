@@ -71,12 +71,3 @@ BrowsePlans.onLeave = function() {
     game.kineticScrolling.stop();
 }
 
-function addRectangle(x, y, w, h, rgb) {
-    var sprite = game.add.graphics(x, y);
-    //sprite.beginFill(Phaser.Color.hexToColor(hex_color), 1);
-    sprite.beginFill(Phaser.Color.getRandomColor(100, 255), 1);
-    sprite.beginFill(Phaser.Color.getColor(rgb.r, rgb.g, rgb.b));
-    sprite.bounds = new PIXI.Rectangle(0, 0, w, h);
-    sprite.drawRect(0, 0, w, h);
-    return sprite;
-}
