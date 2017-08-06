@@ -27,7 +27,7 @@ JoinGame.create = function() {
 }
 
 JoinGame.join = function() {
-    var name = $("name_input").val();
+    var name = $("#name_input").val();
     Client.newPlayer(name);
     game.state.start('MainOffice');
 }
