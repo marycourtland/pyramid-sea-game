@@ -1,4 +1,5 @@
 var transaction_id;
+var dialog_level_count = 0;
 
 var customerSettings = {
 	'age_group_reactions': {'fail': [10,22], 'moderate': [20,30], 'success': [31,40]},
@@ -140,6 +141,24 @@ function generateCustomer() {
 
 	return customer;
 }
+
+var transaction = {};
+
+function startTransaction(customer) {
+	transaction.customer = customer;
+	transaction.level = 0;
+	return transaction;
+}
+
+transaction.getNextDialog = function(response) {
+	var result = getCustomerDialogResponse(transaction.level, response, transaction.customer);
+	if (transaction.level == 3 && response == 'recruit') {
+		transaction.level = 8;
+	} else {
+		transaction.level += 1;
+	}
+	return result;
+};
 
 function getPlayerDialogOptions(dialog_level, options){
 	var keys;
