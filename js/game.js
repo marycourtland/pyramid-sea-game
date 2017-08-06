@@ -42,10 +42,22 @@ Game.preload = function() {
     game.load.image('product_dust_bunny', 'assets/products/Dust-bunny.png');
     game.load.image('product_fresh_dirt', 'assets/products/Fresh-Dirt.png');
     game.load.image('product_seasonal_pollen', 'assets/products/Seasonal-Pollen.png');
+
+	//Characters
+	game.load.image('player_convo','assets/characters/player.png');
+	game.load.image('teen_convo_1','assets/characters/Teen_01.png');
+	game.load.image('teen_convo_2','assets/characters/Teen_02.png');
+	game.load.image('teen_convo_3','assets/characters/Teen_03.png');
+	game.load.image('middle_convo_1','assets/characters/Middle_age_01.png');
+	game.load.image('middle_convo_2','assets/characters/Middle_age_02.png');
+	game.load.image('middle_convo_3','assets/characters/Middle_age_03.png');
+	game.load.image('aged_convo_1','assets/characters/Aged_01.png');
+	game.load.image('aged_convo_2','assets/characters/Aged_02.png');
+	game.load.image('aged_convo_3','assets/characters/Aged_03.png');
 };
 
 Game.create = function(){
- 
+
     // set up container for HTML elements
     var $canvas = $("#game canvas");
     $("#game-html").css({
@@ -65,4 +77,3 @@ Game.create = function(){
     game.state.start('JoinGame');
 
 };
-
