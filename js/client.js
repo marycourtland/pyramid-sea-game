@@ -76,6 +76,17 @@ Client.socket.on('current_inventory', function(data, callback) {
     console.log('Inventory for ' + data.product + ": " + change_string + ' => ' + data.quantity);
 })
 
+
+// Misc Alerts
+
+Client.socket.on('low_bank_balance', function(data, callback) {
+    // data.player_id
+    // data.bank_balance
+    // data.threshhold
+    console.log('** WARNING: LOW BANK BALANCE (under' + data.threshhold + ')');
+})
+
+
 Client.socket.on('notify', function(message, callback) {
     console.log('Notification from server:', message)
 })

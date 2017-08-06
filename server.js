@@ -10,7 +10,11 @@ var plans = require('./server/plans');
 var players = require('./server/players');
 
 var settings = {
-    tick_seconds: 5 // send a synchronized tick to the clients every this-many seconds
+    // send a synchronized tick to the clients every this-many seconds
+    tick_seconds: 5,
+
+    // when to notify player they have a low balance?
+    low_bank_balance_threshhold: 200
 }
 
 
@@ -213,10 +217,14 @@ function doPlanTransfers(plan, products) {
     // The people buying the product
     var receivers = _.filter(players, {plan_id: plan.id});
 
+    var boss = null; // will get populated
 
     // How much the distributor will end up getting
     // (it could also just be multiplied out)
     var total_transaction_amount = 0; 
+
+    var bank_updates = []; // Arrays of [player_id, amount]
+    var inventory_updates = []; // Arrays of [player_id, product, quantity]
 
     receivers.forEach(function(player) {
         // Money
@@ -225,11 +233,11 @@ function doPlanTransfers(plan, products) {
         }, 0);
 
         total_transaction_amount += amount;
-        updateBankAccount(player.id, -amount);
+        bank_updates.push([player.id, -amount]);
 
         // Inventory
         products.forEach(function(item) {
-            updateInventory(player.id, item.product, item.quantity);
+            inventory_updates.push([player.id, item.product, item.quantity])
         })
     })
 
@@ -246,20 +254,81 @@ function doPlanTransfers(plan, products) {
 
             // if boss exists, it's a player
             if (boss) {
-                updateBankAccount(boss.id, boss_cut);
+                bank_updates.push([boss.id, boss_cut]);
             }
         }
 
-        updateBankAccount(distributor.id, remainder_after_cut);
+        bank_updates.push([distributor.id, remainder_after_cut]);
 
         products.forEach(function(item) {
             var total_inventory_deduction = item.quantity * receivers.length;
-            updateInventory(distributor.id, item.product, -total_inventory_deduction);
+            inventory_updates.push([distributor.id, item.product, -total_inventory_deduction]);
         })
     }
     else {
         // it's a non-player; do nothing
     }
+
+    // Only execute all these updates if it won't break the bank for anyone.
+    var bankruptcy = checkForBankruptcy(bank_updates, inventory_updates);
+
+    if (bankruptcy.bank.length === 0 && bankruptcy.inventory.length === 0) {
+        // no one goes bankrupt, yay!
+        bank_updates.forEach(function(item) { updateBankAccount.apply(null, item); });
+        inventory_updates.forEach(function(item) { updateInventory.apply(null, item); });
+    }
+    else {
+        // Someone can't do the transaction. Cancel everything and send alerts out 
+        // TODO: what data to send?
+        receivers.forEach(function(player) { emitToPlayer(player, 'transaction_cancelled'); })
+        if (distributor) emitToPlayer(distributor, 'transaction_cancelled');
+        if (boss) emitToPlayer(boss, 'transaction_cancelled'); // they lost their cut
+    }
+}
+
+function checkForBankruptcy(bank_updates, inventory_updates) {
+    // collect by player
+    var bank_updates_by_player = {};
+    var inventory_updates_by_player = {}; // this has nested per-product things, too
+
+    bank_updates.forEach(function(item) {
+        var player_id = item[0];
+        if (!bank_updates_by_player[player_id]) bank_updates_by_player[player_id] = 0;
+        bank_updates_by_player[player_id] += item[1];
+    })
+
+    inventory_updates.forEach(function(item) {
+        var player_id = item[0];
+        var product = item[1];
+        if (!inventory_updates_by_player[player_id]) inventory_updates_by_player[player_id] = {};
+        if (!inventory_updates_by_player[player_id][product]) inventory_updates_by_player[player_id][product] = 0;
+        inventory_updates_by_player[player_id][product] += item[2];
+    })
+
+    // now check each player's accounts
+
+    var bankruptcy = {bank: [], inventory: []}
+
+    for (var player_id in bank_updates_by_player) {
+        var player = _.find(players, {id: parseInt(player_id)});
+        if (player.bank_account + bank_updates_by_player[player_id] < 0) {
+            bankruptcy.bank.push(player_id);
+        }
+    }
+
+    for (var player_id in inventory_updates_by_player) {
+        var player = _.find(players, {id: parseInt(player_id)});
+        for (var product in inventory_updates_by_player[player_id]) {
+            if ((!player.inventory[product]) || player.inventory[product] + inventory_updates_by_player[player_id][product] < 0) {
+                bankruptcy.inventory.push(player_id);
+            }
+        }
+    }
+
+    // this might have duplicates
+    bankruptcy.inventory = _.uniq(bankruptcy.inventory);
+
+    return bankruptcy;
 }
 
 
@@ -274,6 +343,14 @@ function updateBankAccount(player_id, amount) {
         balance: player.bank_account,
         change: amount
     })
+
+    if (player.bank_account < settings.low_bank_balance_threshhold) {
+        emitToPlayer(player, 'low_bank_balance', {
+            player_id: player_id, //not strictly necessary
+            balance: player.bank_account,
+            threshhold: settings.low_bank_balance_threshhold
+        })
+    }
 }
 
 // Pass in a negative quantity if it's a deduction
