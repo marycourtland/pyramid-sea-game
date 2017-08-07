@@ -112,10 +112,10 @@ var dialogTree = {
 		'south': ["I’m fixin’ to tell you about a deal that’ll knock y’all socks right on off!"],
 		'midwest': ["Well, you betcha, I’ve got quite the deal for you, dontcha know."],
 		'cal': ["I got this gnarly deal you’re going to totally flip over."] },
-	9: {'fail': {'youth': ["Oh this is totes a scam. Scammer no scamming bro!"],
+	9: {false: {'youth': ["Oh this is totes a scam. Scammer no scamming bro!"],
 				 'professional': ["I recognize this scam. I’ll be contacting the BBB"],
 				 'elder': ["I’m too old to fall for that scam. Please don’t call here again."]},
-	    'success': {'youth': ["This requires a selfie"],
+	    true: {'youth': ["This requires a selfie"],
    	    			'professional': ["This sounds like a great opportunity."],
    	    			'elder': ["This is going to pay for all the grandkids presents"]}},
 	// Scam
@@ -139,7 +139,7 @@ function generateCustomer() {
 	customer['occupation'] = randomValue(customer.persona.occupations);
 	customer['responses'] = [];
 	customer['image'] = randomValue(customer.age_group.images);
-
+	current_customer = customer;
 	return customer;
 }
 
@@ -243,13 +243,13 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		result['options'] = getPlayerDialogOptions(8, null);
 	} else if (dialog_level == 9) {
    		result['reaction'] = customer.region.prefs[response];
-		result['dialog'] = randomValue(dialogTree[9][result.reaction]);
-   		result['positivity_change'] = randomInt(customerSettings.region_reactions[result.reaction][0],
+		result['positivity_change'] = randomInt(customerSettings.region_reactions[result.reaction][0],
    				                     customerSettings.region_reactions[result.reaction][1]);
 
 		customer.responses.push(response);
-		//result['close'] = recruitClose(customer);
-		result['dialog'] = randomValue(dialogTree[dialog_level][result.close[0]][customer.age_group.this]);
+		result['close'] = recruitClose(customer);
+		console.log('recruit close:'+result.close);
+		result['dialog'] = randomValue(dialogTree[9][result.close[0]][customer.age_group.this]);
 		//Client.sendCustomerRecruitment(result.reaction[1]);
 	}
 	// below handles dialog_level 7 and 9, where pushed early
@@ -270,7 +270,7 @@ function productClose(customer) {
 	return [sale, item, price, rating];
 }
 
-function recruitSale(customer) {
+function recruitClose(customer) {
 	var rating = 0;
 	var price = customer.responses[5];
 	var sale = (customer.positivity + randomInt(-5,5)) >= 30;

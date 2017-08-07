@@ -1,4 +1,5 @@
 var InCall = {};
+var current_customer = null;
 
 // game.current_customer
 var convo_width = 800;
@@ -44,8 +45,8 @@ InCall.create = function() {
     this.customer_pic = game.add.sprite(
         (game.width - convo_width) / 2,
         hud_margin,
-        'teen_convo_1' // replace
-    )
+		current_customer.image
+    );
 
     // Your profile pic (currently turned off)
     if (false) {
