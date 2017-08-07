@@ -1,5 +1,6 @@
 var transaction_id;
 var dialog_level_count = 0;
+var price_match = {'price1':25, 'price2':40, 'price3':50, 'price4':60, 'price5':75};
 
 var customerSettings = {
 	'age_group_reactions': {'fail': [10,22], 'moderate': [20,30], 'success': [31,40]},
@@ -227,9 +228,9 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		result['options'][po_keys[3]] = (surr[0]+po_values[3]+surr[1]);
 		result['options'][po_keys[4]] = (surr[0]+po_values[4]+surr[1]);
 	} else if (dialog_level == 7) {
-		customer.responses.push(response);
+		customer.responses.push(price_match[response]);
 		result['reaction'] = productClose(customer);
-		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction[0]][customer.age_group.this]);
+		result['dialog'] = randomValue(dialogTree[7][result.reaction[0]][customer.age_group.this]);
 		result['positivity_change'] = 0;
 		var products = {};
 		if (result.reaction[0]) {

@@ -15,10 +15,10 @@ InCall.create = function() {
     game.stage.backgroundColor = "#b8966b";
     this.dialog_options = [];
 
-    if (false)
+    if (true)
     addButton(game.slickUI,
         hud_margin,
-        game.height- hud_margin,
+        game.height - hud_margin,
         button_w,
         button_h,
         'Back to Office',
@@ -37,7 +37,7 @@ InCall.create = function() {
 
     var initial_output = this.transaction.getNextDialog(null);
     console.log(initial_output)
-    
+
     this.renderTransactionOutput(initial_output);
 
     // Customer profile pic
@@ -46,7 +46,6 @@ InCall.create = function() {
         hud_margin,
         'teen_convo_1' // replace
     )
-
 
     // Your profile pic (currently turned off)
     if (false) {
@@ -82,12 +81,12 @@ InCall.renderTransactionOutput = function(output) {
     game.slickUI.add(main_text);
     this.dialog_options.push(main_text); // so it gets destroyed (and recreated) next time
 
+	main_text.add(new SlickUI.Element.Text(10, 10, output.dialog));
 
     var num_options = Object.keys(output.options).length;
     var option_height = 32 * 2;
-    var text = 'testing';
     var option_pad = 8;
-    
+
     var self = this;
     Object.keys(output.options).forEach(function(option_key, i) {
         var text = output.options[option_key];
@@ -119,4 +118,3 @@ InCall.customerChoosesOption = function(option_key) {
     }
 
 }
-
