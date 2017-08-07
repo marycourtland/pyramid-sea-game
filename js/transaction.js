@@ -23,39 +23,39 @@ var customerSettings = {
 					'images': ['aged_convo_1', 'aged_convo_2', 'aged_convo_3']}],
 	'region_reactions': {'fail': [-20,-5], 'moderate': [0,15], 'success': [20,40]},
 	'regions': [{'this': 'canada',
-				 'prefs': {'canada':'success', 'ne':'moderate', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'moderate'},
+				 'prefs': {'canada':'success', 'ne':'fail', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'success'},
 				 'region':["Toronto", "Montreal", "Calgary", "Vancouver", "Winnipeg", "Ottowa", "Calgary", "Quebec City", "Halifax"]},
 				{'this': 'ne',
-				 'prefs': {'canada':'moderate', 'ne':'success', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'midwest':'fail'},
+				 'prefs': {'canada':'success', 'ne':'success', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'fail'},
 				 'region':["Brooklyn", "Boston", "Hartford", "Philadelphia", "Buffalo", "Concord", "Providence", "Pittsburg", "Syracuse"]},
 				{'this': 'texas',
-				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'moderate', 'cal':'moderate', 'midwest':'fail'},
+				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'success', 'cal':'fail', 'midwest':'fail'},
 				 'region':["Oklahoma City", "Austin", "Dallas", "Reno", "Kansas City", "Armarillo", "Santa Fe", "Albuquerque"]},
 				{'this': 'south',
-				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'moderate', 'south':'success', 'cal':'fail', 'midwest':'fail'},
+				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'success', 'cal':'fail', 'midwest':'fail'},
 				 'region': ["Atlanta", "Nashville", "Little Rock", "New Orleans", "Charlotte", "Chattanooga", "Birmingham", "Miami"]},
 				{'this': 'cal',
-				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'moderate', 'south':'fail', 'cal':'success', 'midwest':'moderate'},
+				 'prefs': {'canada':'fail', 'ne':'fail', 'texas':'success', 'south':'fail', 'cal':'success', 'midwest':'fail'},
 				 'region':["Long Beach", "San Francisco", "Portland", "Seattle", "Oakland", "Los Angeles", "Eugene", "Bakersfield"]},
 				{'this': 'midwest',
-				 'prefs': {'canada':'moderate', 'ne':'fail', 'texas':'fail', 'south':'fail', 'cal':'moderate', 'midwest':'success'},
+				 'prefs': {'canada':'success', 'ne':'fail', 'texas':'fail', 'south':'fail', 'cal':'fail', 'midwest':'success'},
 				 'region':["Minneapolis", "Fargo", "Milwaukee", "Cleveland", "Chicago", "Grand Rapids", "Omaha", "Green Bay", "Cincinnati"]}],
 	'disposition': {'min': 0, 'max': 0},
 	'persona_reactions': {'fail': [-30,-20], 'moderate': [-5,5], 'success': [20,30]},
 	'personas': [{'this': 'elitist',
-	 			  'prefs': {'scented':'success', 'grass':'fail', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh' :'moderate'},
+	 			  'prefs': {'scented':'success', 'dirt':'fail', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh' :'moderate'},
 				  'occupations': ["CEO", "Venture Capitalist", "Entrepreneur", "Hedge Fund Manager", "Philanthropist", "Lawyer", "Doctor"]},
 				 {'this': 'hippy',
- 			 	  'prefs': {'scented':'fail', 'grass':'success', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh':'moderate'},
+ 			 	  'prefs': {'scented':'fail', 'dirt':'success', 'bunnies':'fail', 'pollen':'fail', 'saltwater':'fail', 'fresh':'moderate'},
 				  'occupations':["Spirit Healer", "Shaman", "Yoga Guru", "Palm Reader", "Horse Whisperer", "Acupuncturist", "Chakra Aligner"]},
 				 {'this': 'house-spouse',
-  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'moderate', 'pollen':'success', 'saltwater':'fail', 'fresh':'moderate'},
+  			 	  'prefs': {'scented':'fail', 'dirt':'fail', 'bunnies':'moderate', 'pollen':'success', 'saltwater':'fail', 'fresh':'moderate'},
 				 'occupations': ["Unemployed", "Home-maker", "Full Time Parent", "Kindergarten Teacher", "Part-time Nanny", "Loving Spouse", "N/A"]},
 				 {'this': 'trendy',
-  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'fail', 'pollen':'moderate', 'saltwater':'fail', 'fresh':'success'},
+  			 	  'prefs': {'scented':'fail', 'dirt':'fail', 'bunnies':'fail', 'pollen':'moderate', 'saltwater':'fail', 'fresh':'success'},
 				  'occupations': ["Meme maker", "Musician", "Artist", "Model", "Taste-maker", "Photographer", "Club Promoter", "Entertainment Agent"]},
 				 {'this': 'collector',
-  			 	  'prefs': {'scented':'fail', 'grass':'fail', 'bunnies':'success', 'pollen':'fail', 'saltwater':'moderate', 'fresh':'fail'},
+  			 	  'prefs': {'scented':'fail', 'dirt':'fail', 'bunnies':'success', 'pollen':'fail', 'saltwater':'moderate', 'fresh':'fail'},
 				  'occupations': ["Appraiser", "Historian", "Librarian", "Hoarder", "Museum Tour Guide", "Retired", "Antique Restorer", "Junk Collector"]}]
 }
 
@@ -111,10 +111,10 @@ var dialogTree = {
 		'south': ["I’m fixin’ to tell you about a deal that’ll knock y’all socks right on off!"],
 		'midwest': ["Well, you betcha, I’ve got quite the deal for you, dontcha know."],
 		'cal': ["I got this gnarly deal you’re going to totally flip over."] },
-	9: {false: {'youth': ["Oh this is totes a scam. Scammer no scamming bro!"],
+	9: {'fail': {'youth': ["Oh this is totes a scam. Scammer no scamming bro!"],
 				 'professional': ["I recognize this scam. I’ll be contacting the BBB"],
 				 'elder': ["I’m too old to fall for that scam. Please don’t call here again."]},
-	    true: {'youth': ["This requires a selfie"],
+	    'success': {'youth': ["This requires a selfie"],
    	    			'professional': ["This sounds like a great opportunity."],
    	    			'elder': ["This is going to pay for all the grandkids presents"]}},
 	// Scam
@@ -152,15 +152,22 @@ function startTransaction(customer) {
 }
 
 transaction.getNextDialog = function(response) {
-	if (transaction.level == 7 || transaction.level == 9) { return false; }
+	if (transaction.level > 9) { return false; }
+	if (response == 'product') {
+		transaction.level = 3;
+	} else if (response == 'recruit') {
+		transaction.level = 8;
+	}
 	if (response != transaction.last_response && response != null) {
 		transaction.last_response = response;
 	}
 	var result = getCustomerDialogResponse(transaction.level, transaction.last_response, transaction.customer);
-	if (transaction.level == 3 && response == 'recruit') {
-		transaction.level = 8;
-	} else {
+	if (transaction.level == 8) {
 		transaction.level += 1;
+	} else if (transaction.level == 7) {
+		transaction.level += 3;
+	} else {
+		transaction.level += 2;
 	}
 	return result;
 };
@@ -183,46 +190,43 @@ function getPlayerDialogOptions(dialog_level, options){
 
 function getCustomerDialogResponse(dialog_level, response, customer){
 	var result = {};
+	console.log("dl:"+dialog_level);
 	if (dialog_level == 0) {
-		result['speaker'] = 'customer';
 		result['positivity_change'] = customer.disposition;
 		result['dialog'] = randomValue(dialogTree[0]['success']);
-		result['options'] = getPlayerDialogOptions(1, null);
-	} else if (dialog_level == 1) {
-		result['speaker'] = 'player';
-		var dialog = randomValue(dialogTree[dialog_level][response]);
-		result['dialog'] = dialog[0] + Player.name + dialog[1];
-		result['positivity_change'] = 0;
+		result['options'] = {};
+		var options = getPlayerDialogOptions(1, null);
+		for (var k in options) {
+			result['options'][k] = options[k][0] + Player.name + options[k][1];
+		}
 	} else if (dialog_level == 2) {
-		result['speaker'] = 'customer';
 		result['reaction'] = customer.age_group.prefs[response];
 		result['positivity_change'] = randomInt(customerSettings.age_group_reactions[result.reaction][0],
 				                     customerSettings.age_group_reactions[result.reaction][1]);
 		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction][customer.age_group.this]);
 		result['options'] = getPlayerDialogOptions(3, null);
 	} else if (dialog_level == 3) {
-		result['speaker'] = 'player';
-		result['dialog'] = dialogTree[dialog_level][response];
+		result['dialog'] = " . . . ";
 		result['positivity_change'] = 0;
 		result['options'] = getPlayerDialogOptions(4, null);
-	} else if (dialog_level == 4) {
-		result['speaker'] = 'player';
-		result['dialog'] = randomValue(dialogTree[dialog_level][response]);
-		result['positivity_change'] = 0;
 	} else if (dialog_level == 5) {
-		result['speaker'] = 'customer';
-		result['reaction'] = customer.persona.prefs[response]
+		console.log('response@5:'+response);
+		result['reaction'] = customer.persona.prefs[response];
+		console.log("result.reaction: "+result.reaction);
 		result['positivity_change'] = randomInt(customerSettings.persona_reactions[result.reaction][0],
 				                     customerSettings.persona_reactions[result.reaction][1]);
-		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction][customer.age_group.this]);
-		result['options'] = {'price': "<<input text>>"};
-	} else if (dialog_level == 6) {
-		result['speaker'] = 'player';
-		var random_entry = randomValue(dialogTree[dialog_level]['offer']);
-		result['dialog'] = random_entry[0] + response + random_entry[1];
-		result['positivity_change'] = 0;
+		result['dialog'] = randomValue(dialogTree[5][result.reaction][customer.age_group.this]);
+		var po_keys = ['price1', 'price2', 'price3', 'price4', 'price5'];
+		var po_values = [25,40,50,60,75];
+		var surr = randomValue(dialogTree[6]['offer']);
+		console.log("surr: " +surr);
+		result['options'] = {};
+		result['options'][po_keys[0]] = (surr[0]+po_values[0]+surr[1]);
+		result['options'][po_keys[1]] = (surr[0]+po_values[1]+surr[1]);
+		result['options'][po_keys[2]] = (surr[0]+po_values[2]+surr[1]);
+		result['options'][po_keys[3]] = (surr[0]+po_values[3]+surr[1]);
+		result['options'][po_keys[4]] = (surr[0]+po_values[4]+surr[1]);
 	} else if (dialog_level == 7) {
-		result['speaker'] = 'customer';
 		customer.responses.push(response);
 		result['reaction'] = productClose(customer);
 		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction[0]][customer.age_group.this]);
@@ -233,15 +237,18 @@ function getCustomerDialogResponse(dialog_level, response, customer){
 		}
 		//Client.sendCustomerTransaction(products, result.reaction[3]);
 	} else if (dialog_level == 8) {
-		result['speaker'] = 'player';
-		result['dialog'] = randomValue(dialogTree[dialog_level][response]);
+		result['dialog'] = " . . . ";
 		result['positivity_change'] = 0;
+		result['options'] = getPlayerDialogOptions(8, null);
 	} else if (dialog_level == 9) {
-		result['speaker'] = 'customer';
+   		result['reaction'] = customer.region.prefs[response];
+		result['dialog'] = randomValue(dialogTree[9][result.reaction]);
+   		result['positivity_change'] = randomInt(customerSettings.region_reactions[result.reaction][0],
+   				                     customerSettings.region_reactions[result.reaction][1]);
+
 		customer.responses.push(response);
-		result['reaction'] = recruitClose(customer);
-		result['dialog'] = randomValue(dialogTree[dialog_level][result.reaction[0]][customer.age_group.this]);
-		result['positivity_change'] = 0;
+		//result['close'] = recruitClose(customer);
+		result['dialog'] = randomValue(dialogTree[dialog_level][result.close[0]][customer.age_group.this]);
 		//Client.sendCustomerRecruitment(result.reaction[1]);
 	}
 	// below handles dialog_level 7 and 9, where pushed early
