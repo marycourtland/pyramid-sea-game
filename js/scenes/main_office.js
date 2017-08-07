@@ -4,17 +4,36 @@ MainOffice.preload = function() {
     game.slickUI.load('assets/ui/kenney/kenney.json');
 }
 
+MainOffice.meters = {
+    bank: null,
+    influence: null
+}
+
+MainOffice.updateBank = function(amount) {
+    if (amount === undefined) amount = 3000
+    if (this.meters.bank) this.meters.bank.text.text = "BANK: $" + amount;
+}
+
 MainOffice.create = function() {
     game.stage.backgroundColor = "#949292";
 
-    // person
-    //game.add.sprite(0, 0, 'character');
 
     // desk
-    var desk_height = 32*4;
     var bg = game.add.sprite(0, 0, 'main-office');
     bg.inputEnabled = true;
     bg.events.onInputUp.add(hideCustomerList);
+
+
+    // Meters
+    this.meters.bank = new SlickUI.Element.Text(
+        0,
+        32,
+        "BANK: $" + Player.bank_account
+    );
+    game.slickUI.add(this.meters.bank).centerHorizontally();
+    
+
+    // TODO: influence meter
 
     // Buttons
 

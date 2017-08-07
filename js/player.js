@@ -14,7 +14,7 @@ Player.init = function(name, id) {
 }
 
 Player.resetResources = function() {
-    this.bank = 100;
+    this.bank_account = 3000;
     this.clout = 0;
 
     this.inventory = {

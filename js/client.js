@@ -65,6 +65,9 @@ Client.socket.on('current_bank_balance', function(data, callback) {
     // data.change
     var change_string = data.change < 0 ? data.change.toString() : '+' + data.change;
     console.log('Bank balance: ' + change_string + ' => ' + data.balance);
+
+    Player.bank_account = data.balance;
+    MainOffice.updateBank(data.balance)
 })
 
 Client.socket.on('current_inventory', function(data, callback) {

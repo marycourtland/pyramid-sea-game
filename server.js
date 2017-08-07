@@ -54,7 +54,7 @@ io.on('connection',function(socket){
             socket_id: socket.id,
 
             // Initial player resources
-            bank_account: 1000,
+            bank_account: 3000,
             clout: 0,
             inventory: {}
         }
@@ -217,6 +217,8 @@ function doPlanTransfers(plan, products) {
     // The people buying the product
     var receivers = _.filter(players, {plan_id: plan.id});
 
+    console.log('RECEIVERS:', receivers)
+
     var boss = null; // will get populated
 
     // How much the distributor will end up getting
@@ -272,6 +274,7 @@ function doPlanTransfers(plan, products) {
     // Only execute all these updates if it won't break the bank for anyone.
     var bankruptcy = checkForBankruptcy(bank_updates, inventory_updates);
 
+
     if (bankruptcy.bank.length === 0 && bankruptcy.inventory.length === 0) {
         // no one goes bankrupt, yay!
         bank_updates.forEach(function(item) { updateBankAccount.apply(null, item); });
@@ -319,7 +322,7 @@ function checkForBankruptcy(bank_updates, inventory_updates) {
     for (var player_id in inventory_updates_by_player) {
         var player = _.find(players, {id: parseInt(player_id)});
         for (var product in inventory_updates_by_player[player_id]) {
-            if ((!player.inventory[product]) || player.inventory[product] + inventory_updates_by_player[player_id][product] < 0) {
+            if ((player.inventory[product]) && player.inventory[product] + inventory_updates_by_player[player_id][product] < 0) {
                 bankruptcy.inventory.push(player_id);
             }
         }

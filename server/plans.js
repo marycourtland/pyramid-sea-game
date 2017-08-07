@@ -5,7 +5,7 @@
 
 var moment = require('moment');
 
-var main_frequency = 12;
+var main_frequency = 12 * 2; // two minutes
 
 var plans = module.exports = [
     {

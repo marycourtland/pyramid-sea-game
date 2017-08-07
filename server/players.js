@@ -10,7 +10,7 @@ var players = module.exports = [
         plan_id: null, // what distribution plan they're signed up for
         offered_plan_id: null, // what plan they're offering to others
         inventory: {},
-        bank_account: 1000,
+        bank_account: 3000,
         clout: 0,
     },
 ]
