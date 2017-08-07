@@ -16,13 +16,14 @@ function addRectangle(x, y, w, h, rgb) {
     return sprite;
 }
 
-function addButton(parent, x, y, w, h, text, callback) {
+function addButton(parent, x, y, w, h, text, callback, nonCenter) {
     var button = new SlickUI.Element.Button(x, y, w, h);
     parent.add(button);
     button.inputEnabled = true;
     button.events.useHandCursor = true;
     button.events.onInputUp.add(callback);
-    button.add(new SlickUI.Element.Text(0,0, text)).center();
+    var t = button.add(new SlickUI.Element.Text(0,0, text))
+    if (!nonCenter) t.center();
     return button;
 }
 

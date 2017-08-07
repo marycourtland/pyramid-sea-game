@@ -1,6 +1,7 @@
 var Player = {};
 
 Player.init = function(name, id) {
+    console.log('init', name, id)
     this.id = id;
     this.name = name;
     this.plan = null;

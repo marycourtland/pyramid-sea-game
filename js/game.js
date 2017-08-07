@@ -29,6 +29,7 @@ Game.preload = function() {
     game.load.image('character', 'assets/sprites/hub_world_character.png');
     game.load.spritesheet('character-walking', 'assets/sprites/Hub-world-walk-cycle.png', 32, 32, 4);
     game.load.image('main-office', 'assets/Desk-Scene.png');
+    game.load.image('convo-plate', 'assets/convo_plate.png')
 
     //Buildings
     game.load.image('building_1', 'assets/buildings/lavender_tower.png');
@@ -44,16 +45,16 @@ Game.preload = function() {
     game.load.image('product_seasonal_pollen', 'assets/products/Seasonal-Pollen.png');
 
 	//Characters
-	game.load.image('player_convo','assets/characters/player.png');
-	game.load.image('teen_convo_1','assets/characters/Teen_01.png');
-	game.load.image('teen_convo_2','assets/characters/Teen_02.png');
-	game.load.image('teen_convo_3','assets/characters/Teen_03.png');
-	game.load.image('middle_convo_1','assets/characters/Middle_age_01.png');
-	game.load.image('middle_convo_2','assets/characters/Middle_age_02.png');
-	game.load.image('middle_convo_3','assets/characters/Middle_age_03.png');
-	game.load.image('aged_convo_1','assets/characters/Aged_01.png');
-	game.load.image('aged_convo_2','assets/characters/Aged_02.png');
-	game.load.image('aged_convo_3','assets/characters/Aged_03.png');
+    game.load.spritesheet('player_convo','assets/characters/player.png', 320, 380, 2);
+    game.load.spritesheet('teen_convo_1','assets/characters/Teen_01.png', 320, 380, 2);
+    game.load.spritesheet('teen_convo_2','assets/characters/Teen_02.png', 320, 380, 2);
+    game.load.spritesheet('teen_convo_3','assets/characters/Teen_03.png', 320, 380, 2);
+    game.load.spritesheet('middle_convo_1','assets/characters/Middle_age_01.png', 320, 380, 2);
+    game.load.spritesheet('middle_convo_2','assets/characters/Middle_age_02.png', 320, 380, 2);
+    game.load.spritesheet('middle_convo_3','assets/characters/Middle_age_03.png', 320, 380, 2);
+    game.load.spritesheet('aged_convo_1','assets/characters/Aged_01.png', 320, 380, 2);
+    game.load.spritesheet('aged_convo_2','assets/characters/Aged_02.png', 320, 380, 2);
+    game.load.spritesheet('aged_convo_3','assets/characters/Aged_03.png', 320, 380, 2);
 };
 
 Game.create = function(){
