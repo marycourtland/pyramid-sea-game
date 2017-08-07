@@ -30,6 +30,8 @@ Game.preload = function() {
     game.load.spritesheet('character-walking', 'assets/sprites/Hub-world-walk-cycle.png', 32, 32, 4);
     game.load.image('main-office', 'assets/Desk-Scene.png');
     game.load.image('convo-plate', 'assets/convo_plate.png')
+    game.load.image('warehouse', 'assets/Warehouse.png')
+    game.load.image('clipboard', 'assets/warehouse_product_list.png')
 
     //Buildings
     game.load.image('building_1', 'assets/buildings/lavender_tower.png');
@@ -43,6 +45,8 @@ Game.preload = function() {
     game.load.image('product_dust_bunny', 'assets/products/Dust-bunny.png');
     game.load.image('product_fresh_dirt', 'assets/products/Fresh-Dirt.png');
     game.load.image('product_seasonal_pollen', 'assets/products/Seasonal-Pollen.png');
+    game.load.image('product_grass', 'assets/products/Fresher-Dirt.png');
+    game.load.image('product_artisanal_saltwater', 'assets/products/Red_sea_salt.png');
 
 	//Characters
     game.load.spritesheet('player_convo','assets/characters/player.png', 320, 380, 2);

@@ -217,8 +217,6 @@ function doPlanTransfers(plan, products) {
     // The people buying the product
     var receivers = _.filter(players, {plan_id: plan.id});
 
-    console.log('RECEIVERS:', receivers)
-
     var boss = null; // will get populated
 
     // How much the distributor will end up getting

@@ -20,6 +20,15 @@ JoinGame.create = function() {
         ""
     );
 
+    addButton(game.slickUI,
+        (game.width - button_w)/2,
+        320,
+        button_w,
+        button_h,
+        'TAKE THE DEAL',
+        function() { JoinGame.join(); }
+    );  
+
     var enter = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     enter.onDown.add(JoinGame.join, this);
 

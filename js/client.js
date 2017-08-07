@@ -77,6 +77,8 @@ Client.socket.on('current_inventory', function(data, callback) {
     // data.change
     var change_string = data.change < 0 ? data.change.toString() : '+' + data.change;
     console.log('Inventory for ' + data.product + ": " + change_string + ' => ' + data.quantity);
+
+    Player.inventory[data.product] = data.quantity;
 })
 
 

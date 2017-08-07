@@ -18,7 +18,6 @@ Player.resetResources = function() {
     this.clout = 0;
 
     this.inventory = {
-        widgets: 50
     }
 }
 
