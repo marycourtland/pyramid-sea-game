@@ -6,7 +6,7 @@ JoinGame.preload = function() {
 
 JoinGame.create = function() {
     game.stage.backgroundColor = "#949292";
-    //game.add.sprite(0, 0, 'main-office');
+    game.add.sprite(0, 0, 'main-office');
 
     var margin = 100;
     var panel = new SlickUI.Element.Panel(margin, margin, game.width - 2*margin, game.height - 2*margin);
